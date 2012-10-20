@@ -57,6 +57,18 @@ var (
 	flushmutex = new(sync.Mutex)
 )
 
+type buffer struct {
+	draw   func(draw.Image, image.Rectangle, image.Image, image.Point, draw.Op)
+	buffer [](*[]uint8)
+	back   Image
+}
+
+type Image interface {
+	draw.Image
+	PixOffset(x, y int) int
+	SetRGBA(x, y int, c color.RGBA)
+}
+
 // Create new buffer.
 // params:
 // window       - wde compatible window
@@ -90,12 +102,6 @@ func setScreen(screen wde.Image) {
 	}
 }
 
-type buffer struct {
-	draw   func(draw.Image, image.Rectangle, image.Image, image.Point, draw.Op)
-	buffer [](*[]uint8)
-	back   draw.Image
-}
-
 // Switch buffers and render screen with the new one.
 func Flip() {
 	flushmutex.Lock()
@@ -126,7 +132,7 @@ func Draw(r image.Rectangle, src image.Image, sp image.Point, op draw.Op) {
 	b.draw(b.back, r, src, sp, op)
 }
 
-// Changes the color of single pixel
-func Set(x, y int, c color.Color) {
-        b.back.Set(x, y, c)
+// Changes the color of single pixel (color.RGBA)
+func Set(x, y int, c color.RGBA) {
+	b.back.SetRGBA(x, y, c)
 }
