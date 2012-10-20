@@ -125,3 +125,8 @@ func SetEmptyColor(c color.Color) {
 func Draw(r image.Rectangle, src image.Image, sp image.Point, op draw.Op) {
 	b.draw(b.back, r, src, sp, op)
 }
+
+// Changes the color of single pixel
+func Set(x, y int, c color.Color) {
+        b.back.Set(x, y, c)
+}
