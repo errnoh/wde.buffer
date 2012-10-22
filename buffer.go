@@ -39,11 +39,7 @@ Flip() switches buffers and renders the screen.
 package buffer
 
 import (
-	"github.com/errnoh/utils/bgra"
 	"github.com/skelterjohn/go.wde"
-	//"github.com/skelterjohn/go.wde/cocoa"
-	"github.com/skelterjohn/go.wde/win"
-	"github.com/skelterjohn/go.wde/xgb"
 	"image"
 	"image/color"
 	"image/draw"
@@ -79,26 +75,6 @@ func Create(window wde.Window, background color.Color) {
 	if background != nil {
 		SetEmptyColor(background)
 		b.draw(b.back, b.back.Bounds(), empty, image.ZP, draw.Src)
-	}
-}
-
-func setScreen(screen wde.Image) {
-	b = &buffer{buffer: make([](*[]uint8), 3)}
-	switch t := screen.(type) {
-	case *xgb.Image:
-		b.draw = bgra.Draw
-		back := bgra.New(t.Bounds())
-		b.back = back
-		b.buffer[0] = &t.Pix
-		b.buffer[1] = &back.Pix
-	case *win.DIB:
-		b.draw = bgra.Draw
-		back := bgra.New(t.Bounds())
-		b.back = back
-		b.buffer[0] = &t.Pix
-		b.buffer[1] = &back.Pix
-		//case cocoa.Image:
-	default:
 	}
 }
 
