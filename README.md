@@ -20,4 +20,5 @@ Render thread example:
     }
 
 When you're done, close like usual:
+
     win.Close()
